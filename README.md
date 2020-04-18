@@ -5,7 +5,7 @@
 
 [![Chat](https://img.shields.io/badge/Chat%20with%20me-Discord-3498db.svg?style=for-the-badge)](https://discord.gg/u8EQVxf)
 
-![Twitter Follow](https://img.shields.io/twitter/follow/developaaah?color=3498db&label=Follow%20Me%20on%20Twitter&style=for-the-badge)
+[![Twitter Follow](https://img.shields.io/twitter/follow/developaaah?color=3498db&label=Follow%20Me%20on%20Twitter&style=for-the-badge)](https://twitter.com/developaaah)
 
 
 Cobble is a framework skeleton using Slim Framework 3, Laravel Eloquent ORM, Twig Template Engine and Whoops for error reporting.
