@@ -1,8 +1,6 @@
 {
-    "name": "developaaah/slim4-eloquent-twig-webpack",
-    "description": "Framework starter structure with Slim4, Eloquent, Twig and Webpack",
-    "keywords": ["framework", "slim", "slim4", "Webpack", "Eloquent", "Twig"],
-    "type": "project",
+    "name": "developaaah/cobble",
+    "license": "MIT",
     "authors": [
         {
             "name": "Dennis Schuster",
@@ -10,20 +8,19 @@
         }
     ],
     "require": {
-        "slim/slim": "3.12.3",
-        "slim/twig-view": "^2.4",
-        "illuminate/database": "^5.6",
-        "vlucas/phpdotenv": "^4.1",
-        "dopesong/slim-whoops": "^2.3"
+        "slim/slim": "^3",
+        "slim/twig-view": "^2",
+        "dopesong/slim-whoops": "^2.3",
+        "illuminate/database": "^8.48",
+        "vlucas/phpdotenv": "^5.3",
+        "nesbot/carbon": "^2.49",
+        "symfony/var-dumper": "^5.3",
+        "phpmailer/phpmailer": "^6.5"
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app"
+            "App\\": "app",
+            "Bootstrap\\": "bootstrap"
         }
-    },
-    "scripts": {
-        "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ]
     }
 }

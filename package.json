@@ -1,38 +1,40 @@
 {
   "name": "cobble",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "repository": "git@gitlab.com:Developaaah/cobble.git",
-  "author": "Dennis Schuster <mail@dennisschuster.net>",
+  "author": "Dennis Schuster <hi@dennisschuster.net>",
   "license": "MIT",
   "scripts": {
-    "watch": "gulp watch",
-    "build": "gulp build:dev",
-    "build:prod": "gulp build:prod",
-    "moveenv": "gulp move-env",
-    "clean": "gulp clean"
+    "build": "./cobble build",
+    "watch": "./cobble watch",
+    "prod": "./cobble prod",
+    "prod:env": "./cobble prod:env"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "browser-sync": "^2.26.7",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-browserify": "^0.5.1",
-    "gulp-clean": "^0.4.0",
-    "gulp-hash-filename": "^3.0.0",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-imagemin": "^7.1.0",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-minify-inline": "^1.1.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-strip-comments": "^2.5.2",
-    "gulp-uglify-es": "^2.0.0",
-    "gulp-watch": "^5.0.1",
-    "pump": "^3.0.0",
-    "require-dir": "^1.2.0"
+    "@vue/compiler-sfc": "^3.1.2",
+    "@vue/component-compiler-utils": "^3.2.2",
+    "browser-sync": "^2.27.1",
+    "browser-sync-webpack-plugin": "^2.3.0",
+    "compress-images": "^1.9.9",
+    "fs": "^0.0.1-security",
+    "gifsicle": "^5.2.0",
+    "html-minifier": "^4.0.0",
+    "laravel-mix": "^6.0.24",
+    "md5": "^2.3.0",
+    "mozjpeg": "^7.1.0",
+    "path": "^0.12.7",
+    "pngquant": "^4.0.0",
+    "resolve-url-loader": "^4.0.0",
+    "sass": "^1.35.1",
+    "sass-loader": "^12.1.0",
+    "svgo": "^2.3.0",
+    "vue-loader": "^16.2.0",
+    "vue-template-compiler": "^2.6.14"
   },
   "dependencies": {
-    "jquery": "^3.5.0"
+    "axios": "^0.21.1",
+    "jquery": "^3.6.0",
+    "vue": "^3.1.2"
   }
 }

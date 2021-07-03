@@ -6,7 +6,7 @@
  * the script never run on it. Migration sql file name must contains timestamp and a
  * description like '20150118140555_DatabaseStructure.sql'
  * The script create a database table called 'migrations' and store already processed
- * migration file timestamp into this table. On the next run it will not run already
+ * migration file timestamp into this tabel. On the next run it will not run already
  * processed scripts based on 'migrations' table.
  *
  * If only one file specified instead of a folder migration will only work on that script
@@ -24,7 +24,7 @@
  * @author Péter Képes - https://github.com/kepes
  */
 ini_set('memory_limit', '512M');
-$options = getopt("h:m:d:u:p:c:");
+$options = getopt("hm:d:u:p:c:");
 
 if ($options['h'] === false) {
     echo "Usage: php migrate.php [options] [folder|script_file]\n";
@@ -47,25 +47,21 @@ if ($options['c'] != null) {
     $migration->process($location, $options['m'], $options['d'], $options['u'], $options['p']);
 }
 
-class MysqlMigrate
-{
-    public $db;
+class MysqlMigrate {
+    var $db;
 
-    public function __construct()
-    {
+    function __construct() {
         date_default_timezone_set('UTC');
     }
 
-    public function create_migration($location, $name)
-    {
+    function create_migration($location, $name) {
         $filename = $location . '/' . date("YmdHis") . "_$name.sql";
         $this->log("Creating migration file: $filename");
         $f = fopen($filename, "a") or die("Unable to open file!");
         fclose($f);
     }
 
-    public function process($location, $host, $db, $user, $pass)
-    {
+    function process($location, $host, $db, $user, $pass) {
         $this->log("mysql migrate (location: '$location', host: '$host', db: '$db', user: '$user', pass: '$pass')");
         $this->create_connection($host, $db, $user, $pass);
         if (is_dir($location)) {
@@ -75,8 +71,7 @@ class MysqlMigrate
         }
     }
 
-    public function process_folder($folder)
-    {
+    function process_folder($folder) {
         $this->log("processing folder: $folder");
         chdir($folder);
         $files = glob("*.sql");
@@ -86,26 +81,24 @@ class MysqlMigrate
             $date_string = explode('_', $file, 2);
             $date_string = $date_string[0];
             $file_date = DateTime::createFromFormat("YmdHis", $date_string);
-            if (!is_dir($file) && $file_date !== false && ($date_in_db == null || $date_in_db < $file_date)) {
+            if (!is_dir($file) && $file_date !== false && ($date_in_db == null || $date_in_db < $file_date) ) {
                 $this->process_file($file);
                 $this->add_migration_to_database($date_string);
             }
         }
     }
 
-    public function add_migration_to_database($date)
-    {
+    function add_migration_to_database($date) {
         if (!$this->db->query("INSERT INTO migrations values ('$date')")) {
             $this->log("Table insert failed: (" . $this->db->errno . ") " . $this->db->error);
             die;
         }
     }
 
-    public function get_last_migration_date()
-    {
+    function get_last_migration_date() {
         $res = $this->db->query("SHOW TABLES LIKE 'migrations'");
         if ($res->num_rows == 0) {
-            $this->log("Creating migration table in database");
+            $this->log("Creating migration tabel in database");
             if (!$this->db->query("CREATE TABLE migrations (id varchar(255), PRIMARY KEY (id))")) {
                 $this->log("Table creation failed: (" . $this->db->errno . ") " . $this->db->error);
                 die;
@@ -114,27 +107,21 @@ class MysqlMigrate
 
         $res = $this->db->query("select max(id) as id from migrations");
         $row = $res->fetch_assoc();
-        if ($row['id'] == null) {
-            return null;
-        }
+        if ($row['id'] == null) return null;
 
         $date = DateTime::createFromFormat("YmdHis", $row['id']);
-        if ($date == false) {
-            die("Invalid date format in migration table: " . $row['id']);
-        }
+        if ($date == false) die("Invalid date format in migration table: " . $row['id']);
         $this->log("Last migration date in database: " . $row['id']);
         return $date;
     }
 
-    public function process_file($file)
-    {
+    function process_file($file) {
         $this->log("processing file: $file");
         $commands = file_get_contents($file);
         $this->sql($commands);
     }
 
-    public function show_mysql_variables()
-    {
+    function show_mysql_variables() {
         $this->log("Mysql variables:");
         $result = $this->db->query("SHOW VARIABLES;");
         if (!$result) {
@@ -146,24 +133,21 @@ class MysqlMigrate
         }
     }
 
-    private function create_connection($host, $db, $user, $pass)
-    {
+    private function create_connection($host, $db, $user, $pass) {
         $this->log("connecting to db: mysqli($host, $user, $pass, $db)");
         $this->db = new mysqli($host, $user, $pass, $db);
         if ($this->db->connect_errno) {
             $this->log("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error . "\n");
             die;
         }
-        $this->db->options(MYSQLI_READ_DEFAULT_GROUP, "max_allowed_packet=128M");
+        $this->db->options(MYSQLI_READ_DEFAULT_GROUP,"max_allowed_packet=128M");
     }
 
-    private function log($message)
-    {
+    private function log($message) {
         echo "$message\n";
     }
 
-    private function sql($query)
-    {
+    private function sql($query) {
         $this->log("running multi query...");
         /* execute multi query */
         if ($this->db->multi_query($query)) {
@@ -171,7 +155,7 @@ class MysqlMigrate
                 $this->db->store_result();
                 if ($this->db->info) {
                     $this->log($this->db->info);
-                } elseif ($this->db->stat) {
+                } else if ($this->db->stat) {
                     $this->log($this->db->stat);
                 } elseif ($this->db->more_results()) {
                     echo '.';
@@ -186,8 +170,7 @@ class MysqlMigrate
         $this->check_db_error();
     }
 
-    private function check_db_error()
-    {
+    private function check_db_error() {
         if ($this->db->error) {
             $this->log("error:");
             $this->log($this->db->error);
@@ -195,8 +178,7 @@ class MysqlMigrate
         }
     }
 
-    private function startswith($haystack, $needle)
-    {
+    private function startswith($haystack, $needle) {
         return substr($haystack, 0, strlen($needle)) === $needle;
     }
 }

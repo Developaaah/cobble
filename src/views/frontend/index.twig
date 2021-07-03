@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- dynamically loaded styles (raw is needed, otherwise it will be printed out) -->
+    {{ incl.styles|raw }}
+</head>
+<body>
+    <h2>Hello World</h2>
+
+    <br><br>
+
+    <!-- CSRF Token output -->
+    <p>CSRF Token: {{ csrf }}</p>
+
+    <br><br>
+
+    <!-- debug function -->
+    {{ dumper(incl) }}
+
+    <br><br>
+
+    <!-- vue implementation -->
+    <div id="app"></div>
+
+    <br><br>
+
+    <!-- how to use the languages -->
+    <h3>Language Test</h3>
+    <p>{{ lang.language }}: {{ lang.lang }}</p>
+    <br>
+    <a href="/lang/de_DE" style="color: white">click to switch to german</a> <br>
+    <a href="/lang/en_US" style="color: white">click to switch to english</a>
+
+    <!-- dynamically loaded scripts (raw is needed, otherwise it will be printed out) -->
+    {{ incl.scripts|raw }}
+</body>
+</html>

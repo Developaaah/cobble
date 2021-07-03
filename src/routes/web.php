@@ -1,7 +1,15 @@
 <?php
 
-use App\Controllers\IndexController;
-use App\Controllers\MigrateController;
+#
+# Web Routes
+#
+# usage: $app->get();
 
-$app->get("/", IndexController::class . ":index");
-$app->get('/migrate[/{name}]', MigrateController::class . ":migrate");
+use App\Controller\Core\MigrateController;
+use App\Controller\Frontend\IndexController;
+
+$app->get("/", IndexController::class);
+$app->get("/download", IndexController::class . ":downloadAction");
+$app->get("/lang/{lang}", IndexController::class . ":lang");
+
+$app->get("/migrate", MigrateController::class);

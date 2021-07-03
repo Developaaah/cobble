@@ -1,0 +1,67 @@
+#!/usr/bin/sh
+
+MODE=$1
+
+sendhelp() {
+  echo
+  echo "Cobble. The CLI to the Framework"
+  echo
+  echo "Syntax: ./cobble [build|watch|prod|prod:env]"
+  echo
+  echo "options:"
+  echo "   help       Prints this message"
+  echo "   build      Builds the dev enviroment incl. env file"
+  echo "   watch      Starts the watcher"
+  echo "   prod       Builds the production enviroment without the env file"
+  echo "   prod:env   Builds the production enviroment with the env file"
+  echo
+}
+
+copyDirs() {
+  cp -R ./src/vendor ./dist/vendor
+}
+
+compileViews() {
+  files=`ls ./src/views/**/*.twig | cut -c 13-`
+  for entry in $files
+  do
+    echo "compiling: $entry"
+    output=./dist/views/"$(dirname $entry)"/
+    mkdir -p $output
+    npx html-minifier --case-sensitive --collapse-whitespace --remove-comments --remove-script-type-attributes --minify-css true --minify-js true -o "$output"/$(basename $entry) ./src/views/"$entry"
+    echo "compiled $entry"
+    echo "-------------------"
+  done
+}
+
+if [ "$MODE" = 'build' ]; then
+  rm -rf ./dist/*
+  rm ./dist/.env
+  cp ./src/.env ./dist/.env
+  copyDirs
+  yarn exec mix
+  exit
+elif [ "$MODE" = 'watch' ]; then
+  rm -rf ./dist/*
+  rm ./dist/.env
+  cp ./src/.env ./dist/.env
+  copyDirs
+  yarn exec mix watch
+  exit
+elif [ "$MODE" = 'prod' ]; then
+  rm -rf ./dist/*
+  rm ./dist/.env
+  copyDirs
+  compileViews
+  yarn exec mix --production
+  exit
+elif [ "$MODE" = 'prod:env' ]; then
+  rm -rf ./dist/*
+  rm ./dist/.env
+  cp ./src/.env ./dist/.env
+  copyDirs
+  compileViews
+  yarn exec mix --production
+else
+  sendhelp
+fi

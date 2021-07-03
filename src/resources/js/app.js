@@ -1,9 +1,8 @@
-const jQuery = require('jquery');
+/**
+ * Example Vue App
+ */
 
-;(($) => {
+import { createApp} from "vue";
+import App from "../vue/frontend/App";
 
-    $(document).ready(() => {
-        console.log("HALLO");
-    })
-
-})(jQuery);
+createApp(App).mount("#app");
